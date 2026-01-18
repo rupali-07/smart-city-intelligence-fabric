@@ -1,0 +1,12 @@
+relationship aa96d73a-ae0a-924a-bb80-3e0ff39700e9
+	fromColumn: factcitymetrics.area
+	toColumn: dimarea.area
+
+relationship 49b9f3a0-8f48-550f-0051-8b9fd762b169
+	fromColumn: factcitymetrics.hour
+	toColumn: dimhour.hour
+
+relationship 9ce52195-f315-a4d7-2ff7-87a4237a9f22
+	fromColumn: factcitymetrics.date
+	toColumn: dimdate.date
+

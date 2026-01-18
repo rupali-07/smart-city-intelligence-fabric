@@ -1,0 +1,128 @@
+table dimarea
+	lineageTag: 1475c33f-85aa-4eb9-803e-d5286e5bae70
+	sourceLineageTag: [dbo].[dimarea]
+
+	measure 'Avg Congestion' = ```
+			
+			AVERAGE ( factcitymetrics[traffic_congestion] )
+			
+			```
+		lineageTag: 269765ab-aa61-4933-acf0-587a68333c25
+
+		changedProperty = Name
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Avg Speed' = ```
+			
+			AVERAGE ( factcitymetrics[avg_speed] )
+			
+			```
+		lineageTag: 832f2a69-526a-49a5-a62c-3949643ad98e
+
+		changedProperty = Name
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Avg PM2.5' = ```
+			
+			AVERAGE ( factcitymetrics[pm25] )
+			
+			```
+		lineageTag: ae3c0232-1a8e-4848-a04e-6db2f64326ae
+
+		changedProperty = Name
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Energy (kWh)' = ```
+			
+			SUM ( factcitymetrics[energy_consumption_kwh] )
+			
+			```
+		lineageTag: acdc3791-bd99-4d03-a4fb-7d76f9457edc
+
+		changedProperty = Name
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Avg Response Time (min)' = ```
+			
+			AVERAGE ( factcitymetrics[avg_response_time] )
+			
+			```
+		lineageTag: 2f453794-5b97-4605-b684-2b299347e367
+
+		changedProperty = Name
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Incident Count' = ```
+			
+			SUM ( factcitymetrics[incident_count] )
+			
+			```
+		lineageTag: 62852793-4c18-4dc3-b5d8-ce96c1dc6f3d
+
+		changedProperty = Name
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Air Quality Status' = ```
+			
+			SWITCH (
+			    TRUE(),
+			    [Avg PM2.5] > 100, "Severe",
+			    [Avg PM2.5] > 75,  "Very Poor",
+			    [Avg PM2.5] > 50,  "Poor",
+			    "Moderate"
+			)
+			
+			```
+		lineageTag: 3c2b6349-5539-4c6f-9aa2-578f69484ccc
+
+		changedProperty = Name
+
+	measure 'City Health Score' = ```
+			
+			VAR CongestionScore = 100 - [Avg Congestion]
+			VAR AirScore        = 100 - [Avg PM2.5]
+			VAR EmergencyScore  = 100 - [Avg Response Time (min)]
+			RETURN
+			DIVIDE (
+			    CongestionScore + AirScore + EmergencyScore,
+			    3
+			)
+			
+			```
+		lineageTag: 4688b82e-0ad2-4f43-9616-bf57c39f9099
+
+		changedProperty = Name
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Peak Hour' = ```
+			
+			IF ( MAX ( dimhour[hour] ) IN {8,9,18,19}, "Peak", "Off-Peak" )
+			
+			```
+		lineageTag: 37e8e73a-9c75-4f04-875b-82a87bfe1ea9
+
+		changedProperty = Name
+
+	column area
+		dataType: string
+		lineageTag: 44546da3-dea1-4c99-a880-560da577b5a3
+		sourceLineageTag: area
+		summarizeBy: none
+		sourceColumn: area
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dimarea = entity
+		mode: directLake
+		source
+			entityName: dimarea
+			schemaName: dbo
+			expressionSource: 'DirectLake - SmartCity_Lakehouse'
+

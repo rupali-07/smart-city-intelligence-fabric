@@ -1,0 +1,60 @@
+table dimdate
+	lineageTag: 900243ea-2d8d-47f5-8299-92e235ea1b92
+	sourceLineageTag: [dbo].[dimdate]
+
+	column date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 542e0425-64f8-4055-b6e7-a6b914dc5ef8
+		sourceLineageTag: date
+		summarizeBy: none
+		sourceColumn: date
+
+		annotation SummarizationSetBy = Automatic
+
+	column year
+		dataType: int64
+		formatString: 0
+		lineageTag: 262bfd06-9fa6-47c3-9a9e-a32f1483e7c8
+		sourceLineageTag: year
+		summarizeBy: none
+		sourceColumn: year
+
+		annotation SummarizationSetBy = Automatic
+
+	column month
+		dataType: int64
+		formatString: 0
+		lineageTag: 9bb28847-2624-4933-996a-e76d66b86423
+		sourceLineageTag: month
+		summarizeBy: none
+		sourceColumn: month
+
+		annotation SummarizationSetBy = Automatic
+
+	column day
+		dataType: int64
+		formatString: 0
+		lineageTag: 48966377-946d-4a57-aaa0-ac433147179c
+		sourceLineageTag: day
+		summarizeBy: none
+		sourceColumn: day
+
+		annotation SummarizationSetBy = Automatic
+
+	column day_name
+		dataType: string
+		lineageTag: f6706294-f0e6-441b-9a2a-f6292803b353
+		sourceLineageTag: day_name
+		summarizeBy: none
+		sourceColumn: day_name
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dimdate = entity
+		mode: directLake
+		source
+			entityName: dimdate
+			schemaName: dbo
+			expressionSource: 'DirectLake - SmartCity_Lakehouse'
+

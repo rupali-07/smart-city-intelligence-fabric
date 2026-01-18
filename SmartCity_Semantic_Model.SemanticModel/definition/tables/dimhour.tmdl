@@ -1,0 +1,21 @@
+table dimhour
+	lineageTag: bba27ea1-aec2-4c21-a8fc-fd13bb8fe9b6
+	sourceLineageTag: [dbo].[dimhour]
+
+	column hour
+		dataType: int64
+		formatString: 0
+		lineageTag: e129bd8b-62d7-4b4e-a11d-cd4cd4aa670d
+		sourceLineageTag: hour
+		summarizeBy: none
+		sourceColumn: hour
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dimhour = entity
+		mode: directLake
+		source
+			entityName: dimhour
+			schemaName: dbo
+			expressionSource: 'DirectLake - SmartCity_Lakehouse'
+
